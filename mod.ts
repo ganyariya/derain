@@ -14,7 +14,7 @@ const getScreenSizes = async () => {
   return [lines, columns, characters];
 };
 
-async function* render(speed: number, ratio: number): any {
+async function* render(speed: number, ratio: number): AsyncGenerator<string> {
   let time = new Date().getTime();
   let [lines, columns, characters] = await getScreenSizes();
   const drops = generateDrops(lines, columns, Math.floor(characters * ratio));
@@ -26,7 +26,6 @@ async function* render(speed: number, ratio: number): any {
       time = now;
     }
 
-    for (const drop of drops) drop.move(lines, columns);
     const screen = getEmptyScreen(lines, columns);
     const denoEmbeddedScreen = getDenoEmbeddedScreen(lines, columns, screen);
     const rainedDenoScreen = getRainedDenoScreeen(
@@ -35,13 +34,11 @@ async function* render(speed: number, ratio: number): any {
       denoEmbeddedScreen,
       drops
     );
-    yield rainedDenoScreen.join("\n");
+    for (const drop of drops) drop.move(lines, columns);
 
+    yield rainedDenoScreen.join("\n");
     await sleep(speed);
   }
 }
 
-for await (const content of render(0.05, 0.002)) {
-  console.clear();
-  console.log(content);
-}
+export { render };
