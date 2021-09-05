@@ -19,4 +19,14 @@ class Drop {
   }
 }
 
-export { Drop };
+const generateDrops = (
+  lines: number,
+  columns: number,
+  count: number
+): Drop[] => {
+  const drops = [];
+  for (let i = 0; i < count; i++) drops.push(new Drop(lines, columns));
+  return drops;
+};
+
+export { Drop, generateDrops };

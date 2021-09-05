@@ -5,7 +5,7 @@ const deno = [
   "    \\  \\       ",
   "    |   -^\\    ",
   "    ⎩      ﾄ､  ",
-  "     u¯u︶u  \\  ",
+  "     u¯u¯u  \\  ",
 ];
 
 export { deno };
