@@ -14,7 +14,7 @@ deno with rain...
 deno install --allow-run --force --name derain https://github.com/ganyariya/derain/raw/v1.0.0/cli.ts
 
 derain
-derain --speed 0.2 --ratio 0.001
+derain --help
 ```
 
 **Module** (Example)
