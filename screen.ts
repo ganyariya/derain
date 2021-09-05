@@ -2,6 +2,15 @@ import { replaceAt } from "./util.ts";
 import { deno } from "./ascii.ts";
 import { Drop } from "./drop.ts";
 
+const canDrawDeno = (
+  lines: number,
+  columns: number,
+  denoHeight: number,
+  denoWidth: number
+) => {
+  return lines >= denoHeight && columns >= denoWidth;
+};
+
 const getEmptyScreen = (lines: number, columns: number): string[] => {
   const texts: string[] = Array(lines).fill(" ".repeat(columns));
   return texts;
@@ -14,6 +23,8 @@ const getDenoEmbeddedScreen = (
 ): string[] => {
   const denoHeight = deno.length;
   const denoWidth = 14;
+
+  if (!canDrawDeno(lines, columns, denoHeight, denoWidth)) return texts;
 
   const lineMid = Math.floor(lines / 2) + 1;
   const columnMid = Math.floor(columns / 2);
