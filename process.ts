@@ -5,17 +5,17 @@ const invokeColumnsProcess = () => {
   });
 };
 
-const getColumns = async (): Promise<number> => {
-  const process = invokeColumnsProcess();
-  const output = new TextDecoder().decode(await process.output());
-  return Number(output);
-};
-
 const invokeLinesProcess = () => {
   return Deno.run({
     cmd: ["tput", "lines"],
     stdout: "piped",
   });
+};
+
+const getColumns = async (): Promise<number> => {
+  const process = invokeColumnsProcess();
+  const output = new TextDecoder().decode(await process.output());
+  return Number(output);
 };
 
 const getLines = async (): Promise<number> => {
