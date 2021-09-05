@@ -1,4 +1,3 @@
-import { sleep } from "https://deno.land/x/sleep/mod.ts";
 import { getColumns, getLines } from "./process.ts";
 import {
   getEmptyScreen,
@@ -14,7 +13,7 @@ const getScreenSizes = async () => {
   return [lines, columns, characters];
 };
 
-async function* render(speed: number, ratio: number): AsyncGenerator<string> {
+async function* render(ratio: number): AsyncGenerator<string> {
   let time = new Date().getTime();
   let [lines, columns, characters] = await getScreenSizes();
   const drops = generateDrops(lines, columns, Math.floor(characters * ratio));
@@ -37,7 +36,6 @@ async function* render(speed: number, ratio: number): AsyncGenerator<string> {
     for (const drop of drops) drop.move(lines, columns);
 
     yield rainedDenoScreen.join("\n");
-    await sleep(speed);
   }
 }
 
