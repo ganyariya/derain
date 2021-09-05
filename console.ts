@@ -7,7 +7,7 @@ const lines = await getLines();
 const characters = columns * lines;
 const portion = 0.02;
 
-const getScreen = (): string[] => {
+const getScreen = (lines: number, columns: number): string[] => {
   const texts: string[] = Array(lines).fill(" ".repeat(columns));
   return texts;
 };
@@ -42,24 +42,24 @@ class Drop {
   x: number;
   len: number;
 
-  public constructor(width: number, height: number) {
-    this.x = randomInt(0, width - 1);
+  public constructor(height: number, width: number) {
     this.y = randomInt(0, height - 1);
+    this.x = randomInt(0, width - 1);
     this.len = randomInt(2, 5);
   }
 
-  move(width: number, height: number) {
-    this.x -= 1;
-    this.x = (this.x + width) % width;
+  move(height: number, width: number) {
     this.y += 1;
     this.y %= height;
+    this.x -= 1;
+    this.x = (this.x + width) % width;
   }
 }
 
-const screen = getScreen();
+const screen = getScreen(lines, columns);
 const deno = getEmbeddedDeno(screen);
 const drops: Drop[] = [];
-for (let i = 0; i < 10; i++) drops.push(new Drop(columns, lines));
+for (let i = 0; i < 10; i++) drops.push(new Drop(lines, columns));
 
 const getRainedDeno = (texts: string[], drops: Drop[]): string[] => {
   const ret = [...texts];
@@ -76,8 +76,31 @@ const getRainedDeno = (texts: string[], drops: Drop[]): string[] => {
 while (true) {
   console.clear();
   const rained = getRainedDeno(deno, drops);
-  for (let drop of drops) drop.move(columns, lines);
+  for (let drop of drops) drop.move(lines, columns);
   console.log(rained.join("\n"));
   //   console.log(deno.join("\n"));
   await sleep(0.05);
+}
+
+const getScreenSizes = async () => {
+  const lines = await getLines();
+  const columns = await getColumns();
+  const characters = lines * columns;
+  return [lines, columns, characters];
+};
+
+async function* render(speed: number): any {
+  let time = new Date().getTime();
+  let [lines, columns, characters] = await getScreenSizes();
+
+  while (true) {
+    const now = new Date().getTime();
+    if (now - time >= 1000) {
+      [lines, columns, characters] = await getScreenSizes();
+      time = now;
+    }
+
+    const screen = getScreen(lines, columns);
+  }
+  yield 1;
 }
