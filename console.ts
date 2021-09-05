@@ -7,12 +7,16 @@ const lines = await getLines();
 const characters = columns * lines;
 const portion = 0.02;
 
-const getScreen = (lines: number, columns: number): string[] => {
+const getEmptyScreen = (lines: number, columns: number): string[] => {
   const texts: string[] = Array(lines).fill(" ".repeat(columns));
   return texts;
 };
 
-const getEmbeddedDeno = (texts: string[]): string[] => {
+const getDenoEmbeddedScreen = (
+  lines: number,
+  columns: number,
+  texts: string[]
+): string[] => {
   const deno = [
     "  __           ",
     " ( ･ \\         ",
@@ -56,12 +60,17 @@ class Drop {
   }
 }
 
-const screen = getScreen(lines, columns);
-const deno = getEmbeddedDeno(screen);
+const screen = getEmptyScreen(lines, columns);
+const deno = getDenoEmbeddedScreen(lines, columns, screen);
 const drops: Drop[] = [];
 for (let i = 0; i < 10; i++) drops.push(new Drop(lines, columns));
 
-const getRainedDeno = (texts: string[], drops: Drop[]): string[] => {
+const getRainedDenoScreeen = (
+  lines: number,
+  columns: number,
+  texts: string[],
+  drops: Drop[]
+): string[] => {
   const ret = [...texts];
   for (const drop of drops) {
     for (let i = 0; i < drop.len; i++) {
@@ -73,14 +82,14 @@ const getRainedDeno = (texts: string[], drops: Drop[]): string[] => {
   return ret;
 };
 
-while (true) {
-  console.clear();
-  const rained = getRainedDeno(deno, drops);
-  for (let drop of drops) drop.move(lines, columns);
-  console.log(rained.join("\n"));
-  //   console.log(deno.join("\n"));
-  await sleep(0.05);
-}
+// while (true) {
+//   console.clear();
+//   const rained = getRainedDenoScreeen(lines, columns, deno, drops);
+//   for (let drop of drops) drop.move(lines, columns);
+//   console.log(rained.join("\n"));
+//   //   console.log(deno.join("\n"));
+//   await sleep(0.05);
+// }
 
 const getScreenSizes = async () => {
   const lines = await getLines();
@@ -92,6 +101,8 @@ const getScreenSizes = async () => {
 async function* render(speed: number): any {
   let time = new Date().getTime();
   let [lines, columns, characters] = await getScreenSizes();
+  const drops: Drop[] = [];
+  for (let i = 0; i < 10; i++) drops.push(new Drop(lines, columns));
 
   while (true) {
     const now = new Date().getTime();
@@ -100,7 +111,20 @@ async function* render(speed: number): any {
       time = now;
     }
 
-    const screen = getScreen(lines, columns);
+    const screen = getEmptyScreen(lines, columns);
+    const denoEmbeddedScreen = getDenoEmbeddedScreen(lines, columns, screen);
+    const rainedDenoScreen = getRainedDenoScreeen(
+      lines,
+      columns,
+      denoEmbeddedScreen,
+      drops
+    );
+    yield rainedDenoScreen.join("\n");
+    for (let drop of drops) drop.move(lines, columns);
+    await sleep(0.05);
   }
-  yield 1;
+}
+
+for await (const content of render(0.2)) {
+  console.log(content);
 }
