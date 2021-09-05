@@ -15,7 +15,7 @@ deno with rain...
 **CLI**
 
 ```shell
-deno install --allow-run --force --name derain https://github.com/ganyariya/derain/raw/v1.0.0/cli.ts
+deno install --allow-run --force --name derain https://github.com/ganyariya/derain/raw/v1.0.2/cli.ts
 
 derain
 derain --help
@@ -24,7 +24,7 @@ derain --help
 **Module** (Example)
 
 ```typescript
-import { render } from "https://github.com/ganyariya/derain/raw/v1.0.0/cli.ts";
+import { render } from "https://github.com/ganyariya/derain/raw/v1.0.2/cli.ts";
 
 for await (const content of render(0.05, 0.002)) {
   console.clear();
