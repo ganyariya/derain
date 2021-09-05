@@ -1,17 +1,6 @@
 import { sleep } from "https://deno.land/x/sleep/mod.ts";
 import { getColumns, getLines } from "./process.ts";
-
-const replaceAt = (text: string, index: number, replacement: string) => {
-  return (
-    text.substr(0, index) +
-    replacement +
-    text.substr(index + replacement.length)
-  );
-};
-
-const randomInt = (min: number, max: number) => {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-};
+import { replaceAt, randomInt } from "./util.ts";
 
 const columns = await getColumns();
 const lines = await getLines();
