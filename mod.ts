@@ -1,10 +1,10 @@
-import { getColumns, getLines } from "./process.ts";
+import { getColumns, getLines } from "./components/process.ts";
 import {
   getEmptyScreen,
   getDenoEmbeddedScreen,
   getRainedDenoScreeen,
-} from "./screen.ts";
-import { generateDrops } from "./drop.ts";
+} from "./components/screen.ts";
+import { generateDrops } from "./components/drop.ts";
 
 const getScreenSizes = async () => {
   const lines = await getLines();
