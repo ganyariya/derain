@@ -55,4 +55,9 @@ const getRainedDenoScreeen = (
   return ret;
 };
 
-export { getEmptyScreen, getDenoEmbeddedScreen, getRainedDenoScreeen };
+export {
+  canDrawDeno,
+  getEmptyScreen,
+  getDenoEmbeddedScreen,
+  getRainedDenoScreeen,
+};
